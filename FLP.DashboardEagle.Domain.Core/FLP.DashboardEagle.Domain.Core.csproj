@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FLP.DashboardEagle.Domain.Interface\FLP.DashboardEagle.Domain.Interface.csproj" />
+    <ProjectReference Include="..\FLP.DashboardEagle.Infraestructure.Interface\FLP.DashboardEagle.Infraestructure.Interface.csproj" />
+  </ItemGroup>
+
+</Project>

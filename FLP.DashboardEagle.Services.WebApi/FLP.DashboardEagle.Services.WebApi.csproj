@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FLP.DashboardEagle.Application.Interface\FLP.DashboardEagle.Application.Interface.csproj" />
+    <ProjectReference Include="..\FLP.DashboardEagle.Application.Main\FLP.DashboardEagle.Application.Main.csproj" />
+    <ProjectReference Include="..\FLP.DashboardEagle.Domain.Core\FLP.DashboardEagle.Domain.Core.csproj" />
+    <ProjectReference Include="..\FLP.DashboardEagle.Infraestructure.Data\FLP.DashboardEagle.Infraestructure.Data.csproj" />
+    <ProjectReference Include="..\FLP.DashboardEagle.Infraestructure.Repository\FLP.DashboardEagle.Infraestructure.Repository.csproj" />
+    <ProjectReference Include="..\FLP.DashboardEagle.Transversal.Mapper\FLP.DashboardEagle.Transversal.Mapper.csproj" />
+  </ItemGroup>
+
+</Project>
