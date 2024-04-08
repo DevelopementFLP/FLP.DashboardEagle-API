@@ -1,7 +1,7 @@
 ﻿using FLP.DashboardEagle.Transversal.Common;
 using Microsoft.Extensions.Configuration;
-using System.Data;
 using Npgsql;
+using System.Data;
 
 namespace FLP.DashboardEagle.Infraestructure.Data
 {
@@ -11,23 +11,22 @@ namespace FLP.DashboardEagle.Infraestructure.Data
 
         public ConnectionFactory(IConfiguration configuration) => _configuration = configuration;
 
-        public IDbConnection? GetConnection
+        public IDbConnection? GetConnection(string connectionString)
         {
-            get
+            IDbConnection? connection = null;
+
+            try
             {
-                var connection = new NpgsqlConnection(_configuration.GetConnectionString("EagleConnectionString"));
-                
-                try
-                {
-                    connection.Open();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    connection = null;
-                }
-                return connection;
+                connection = new NpgsqlConnection(_configuration.GetConnectionString(connectionString));
+
+                connection.Open();
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                connection = null;
+            }
+            return connection;
         }
     }
 }

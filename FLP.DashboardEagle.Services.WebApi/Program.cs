@@ -19,14 +19,33 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: corsPolicy,
         policy =>
-            policy.WithOrigins(corsOrigin));
+            policy.WithOrigins(corsOrigin).AllowAnyHeader());
 });
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAutoMapper(x => x.AddProfile(new MappingsProfile()));
 builder.Services.AddSingleton<IConnectionFactory, ConnectionFactory>();
+
+//builder.Services.AddScoped<IEagleRepository, EagleRepository>();
+builder.Services.AddScoped<IEagleRepository>(serviceProvider =>
+{
+    var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+    var httpContext = httpContextAccessor.HttpContext;
+    var connectionStringHeader = httpContext.Request.Headers["Connection-String-Name"];
+
+    if(string.IsNullOrEmpty(connectionStringHeader) )
+    {
+        throw new InvalidOperationException("No se proporcionó el nombre de la cadena de conexión.");
+    }
+
+    var connectionFactory = serviceProvider.GetRequiredService<IConnectionFactory>();
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    return new EagleRepository(connectionFactory, configuration, connectionStringHeader);
+});
+
 builder.Services.AddScoped<IEagleResponseApplication, EagleResponseApplication>();
 builder.Services.AddScoped<IEagleResponseDomain, EagleResponseDomain>();
-builder.Services.AddScoped<IEagleRepository, EagleRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,12 +1,7 @@
 ﻿using FLP.DashboardEagle.Transversal.Common;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FLP.DashboardEagle.Infraestructure.Data
 {
@@ -16,14 +11,13 @@ namespace FLP.DashboardEagle.Infraestructure.Data
 
         public SqlConnectionFactory(IConfiguration configuration) => _configuration = configuration;
 
-        public IDbConnection? GetConnection
+        public IDbConnection? GetConnection(string connectionString)
         {
-            get
-            {
-                var connection = new SqlConnection(_configuration.GetConnectionString("HPConnectionString"));
-                connection.Open();
-                return connection;
-            }
+
+            var connection = new SqlConnection(_configuration.GetConnectionString(connectionString));
+            connection.Open();
+            return connection;
+
         }
     }
 }

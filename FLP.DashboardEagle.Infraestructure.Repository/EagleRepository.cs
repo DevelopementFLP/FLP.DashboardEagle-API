@@ -3,7 +3,6 @@ using FLP.DashboardEagle.Domain.Entity;
 using FLP.DashboardEagle.Infraestructure.Interface;
 using FLP.DashboardEagle.Transversal.Common;
 using Microsoft.Extensions.Configuration;
-using Npgsql;
 using System.Data;
 
 namespace FLP.DashboardEagle.Infraestructure.Repository
@@ -12,17 +11,19 @@ namespace FLP.DashboardEagle.Infraestructure.Repository
     {
         private readonly IConnectionFactory _connectionFactory;
         private readonly IConfiguration _configuration;
+        private readonly string _connectionStringName;
 
-        public EagleRepository(IConnectionFactory connectionFactory, IConfiguration configuration)
+        public EagleRepository(IConnectionFactory connectionFactory, IConfiguration configuration, string connectionString)
         {
             _connectionFactory = connectionFactory;
             _configuration = configuration;
+            _connectionStringName = connectionString;
         }
         
         #region Métodos síncronos
         public IEnumerable<EagleResponse> GetAll(DateTime date)
         {
-            using(var connection = _connectionFactory.GetConnection)
+            using(var connection = _connectionFactory.GetConnection(_connectionStringName))
             {
          
                     var query = _configuration.GetSection("Queries:sqlQueryGetAllEAGLE").Value!.ToString(); ;
@@ -35,7 +36,7 @@ namespace FLP.DashboardEagle.Infraestructure.Repository
 
         public IEnumerable<EagleResponse> GetDataByDay(DateTime startDate, DateTime endDate)
         {
-            using (var connection = _connectionFactory.GetConnection) {
+            using (var connection = _connectionFactory.GetConnection(_connectionStringName)) {
                 var query = _configuration.GetSection("Queries:sqlQueryGetAllByDayEAGLE").Value!.ToString();
                 query = query.Replace("@fecha", startDate.ToString("yyyy-MM-dd"));
                 query = query.Replace("@siguienteDia", endDate.ToString("yyyy-MM-dd"));
@@ -48,7 +49,7 @@ namespace FLP.DashboardEagle.Infraestructure.Repository
         #region Métodos asíncronos
         public async Task<IEnumerable<EagleResponse>> GetAllAsync(DateTime date)
         {
-            using (var connection = _connectionFactory.GetConnection)
+            using (var connection = _connectionFactory.GetConnection(_connectionStringName))
             {
                 var query = _configuration.GetSection("Queries:sqlQueryGetAllEAGLE").Value.ToString(); ;
                 query = query.Replace("@fecha", date.ToString("yyyy-MM-dd"));
@@ -59,7 +60,7 @@ namespace FLP.DashboardEagle.Infraestructure.Repository
 
         public async Task<IEnumerable<EagleResponse>> GetDataByDayAsync(DateTime startDate, DateTime endDate)
         {
-            using (var connection = _connectionFactory.GetConnection)
+            using (var connection = _connectionFactory.GetConnection(_connectionStringName))
             {
                 var query = _configuration.GetSection("Queries:sqlQueryGetAllByDayEAGLE").Value.ToString(); ;
                 query = query.Replace("@fecha", startDate.ToString("yyyy-MM-dd"));
